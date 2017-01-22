@@ -99,8 +99,8 @@
 	        var _getRandomCell = getRandomCell(),
 	            x = _getRandomCell.x,
 	            y = _getRandomCell.y;
-	        //createTank(x, y, App.const.right)
 
+	        createTank(x, y, App.const.right);
 	    }, createTankInterval);
 
 	    // ----------
