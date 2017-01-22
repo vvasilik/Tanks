@@ -48,7 +48,9 @@
 
 	var _map = __webpack_require__(1);
 
-	__webpack_require__(2);
+	var _controls = __webpack_require__(2);
+
+	__webpack_require__(3);
 
 	init();
 
@@ -70,7 +72,7 @@
 	    var intervalBulletsCreation = 300;
 	    var createTankInterval = 3000;
 	    var bodyWidth = Math.floor(body.offsetWidth);
-	    var bodyHeight = Math.floor(body.offsetHeight);
+	    var bodyHeight = isMobile() ? Math.floor(body.offsetHeight) - 60 : Math.floor(body.offsetHeight);
 	    var mapWidth = (bodyWidth - bodyWidth % point) / point;
 	    var mapHeight = (bodyHeight - bodyHeight % point) / point;
 	    var main = document.querySelector(".js-main");
@@ -80,6 +82,8 @@
 	    var maxY = mapHeight - 1;
 
 	    var score = 0;
+
+	    if (isMobile()) body.classList.add("_mobile");
 
 	    (0, _map.initMap)({
 	        width: point * mapWidth,
@@ -95,11 +99,15 @@
 	        var _getRandomCell = getRandomCell(),
 	            x = _getRandomCell.x,
 	            y = _getRandomCell.y;
+	        //createTank(x, y, App.const.right)
 
-	        createTank(x, y, App.const.right);
 	    }, createTankInterval);
 
 	    // ----------
+
+	    function isMobile() {
+	        return 'ontouchstart' in window;
+	    }
 
 	    function createTank(x, y, direction) {
 	        App.tanks.push(new Tank(x, y, direction));
@@ -253,6 +261,8 @@
 
 	            moveMainTank(_this);
 	        });
+
+	        if (isMobile()) (0, _controls.initControls)(App, this, moveMainTank, createBullet);
 	    }
 
 	    function Bullet(x, y) {
@@ -439,6 +449,54 @@
 
 /***/ },
 /* 2 */
+/***/ function(module, exports) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	exports.initControls = initControls;
+	function initControls(App, item, moveMainTank, createBullet) {
+	    var btnLeft = document.querySelector(".js-controls__left");
+	    var btnRight = document.querySelector(".js-controls__right");
+	    var btnTop = document.querySelector(".js-controls__top");
+	    var btnBottom = document.querySelector(".js-controls__bottom");
+	    var shoot = document.querySelector(".js-controls__shoot");
+
+	    initListeners();
+
+	    // -------
+
+	    function initListeners() {
+	        btnLeft.addEventListener("click", function () {
+	            item.direction = App.const.left;
+	            moveMainTank(item);
+	        });
+
+	        btnRight.addEventListener("click", function () {
+	            item.direction = App.const.right;
+	            moveMainTank(item);
+	        });
+
+	        btnTop.addEventListener("click", function () {
+	            item.direction = App.const.top;
+	            moveMainTank(item);
+	        });
+
+	        btnBottom.addEventListener("click", function () {
+	            item.direction = App.const.bottom;
+	            moveMainTank(item);
+	        });
+
+	        shoot.addEventListener("click", function () {
+	            createBullet(item.x, item.y, item.direction);
+	        });
+	    }
+	}
+
+/***/ },
+/* 3 */
 /***/ function(module, exports) {
 
 	// removed by extract-text-webpack-plugin

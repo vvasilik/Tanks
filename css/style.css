@@ -9,6 +9,10 @@ body {
     justify-content: center;
     align-items: center;
     margin: 0;
+
+    &._mobile {
+        align-items: flex-start;
+    }
 }
 
 .main {
@@ -94,4 +98,42 @@ body {
     z-index: 9;
     background: url(../images/explosion.png) 50% 50% no-repeat;
     background-size: cover;
+}
+
+.controls {
+    display: none;
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+
+    body._mobile & {
+        display: block;
+    }
+
+    &__list {
+        display: flex;
+        margin: 0;
+        padding: 0;
+        list-style: none;
+    }
+
+    &__item {
+        flex: 0 0 50px;
+
+        &._large {
+            flex: 1 0 auto;
+        }
+    }
+
+    &__btn {
+        display: block;
+        width: 100%;
+        padding:10px 0;
+        border: 1px solid #f00;
+        background-color: #fff;
+        color: #f00;
+        font-size: 20px;
+        line-height: 30px;
+    }
 }

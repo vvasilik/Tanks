@@ -1,6 +1,7 @@
 require("../css/style.css");
 
 import {initMap} from "./map"
+import {initControls} from "./controls"
 
 init();
 
@@ -22,7 +23,7 @@ function init() {
     const intervalBulletsCreation = 300;
     const createTankInterval = 3000;
     const bodyWidth = Math.floor(body.offsetWidth);
-    const bodyHeight = Math.floor(body.offsetHeight);
+    const bodyHeight = isMobile() ? Math.floor(body.offsetHeight) - 60 : Math.floor(body.offsetHeight);
     const mapWidth = (bodyWidth - bodyWidth % point) / point;
     const mapHeight = (bodyHeight - bodyHeight % point) / point;
     const main = document.querySelector(".js-main");
@@ -32,6 +33,8 @@ function init() {
     const maxY = mapHeight - 1;
 
     let score = 0;
+
+    if (isMobile()) body.classList.add("_mobile");
 
     initMap({
         width: point * mapWidth,
@@ -49,12 +52,16 @@ function init() {
     setInterval(
         () => {
             let {x, y} = getRandomCell();
-            createTank(x, y, App.const.right)
+            //createTank(x, y, App.const.right)
         },
         createTankInterval
     );
 
 // ----------
+
+    function isMobile() {
+        return 'ontouchstart' in window;
+    }
 
     function createTank(x, y, direction) {
         App.tanks.push(new Tank(x, y, direction));
@@ -168,41 +175,42 @@ function init() {
 
         body.addEventListener("keydown", (e) => {
 
+            const code = e.keyCode;
 
-                const code = e.keyCode;
+            switch (code) {
+                case 40:
+                    this.direction = App.const.bottom;
+                    break;
 
-                switch (code) {
-                    case 40:
-                        this.direction = App.const.bottom;
-                        break;
+                case 38:
+                    this.direction = App.const.top;
+                    break;
 
-                    case 38:
-                        this.direction = App.const.top;
-                        break;
+                case 39:
+                    this.direction = App.const.right;
+                    break;
 
-                    case 39:
-                        this.direction = App.const.right;
-                        break;
+                case 37:
+                    this.direction = App.const.left;
+                    break;
 
-                    case 37:
-                        this.direction = App.const.left;
-                        break;
+                case 32:
+                    if (!isPressedSpace) {
+                        isPressedSpace = true;
 
-                    case 32:
-                        if (!isPressedSpace) {
-                            isPressedSpace = true;
+                        setTimeout(() => {
+                            isPressedSpace = false;
+                        }, intervalBulletsCreation);
 
-                            setTimeout(() => {
-                                isPressedSpace = false;
-                            }, intervalBulletsCreation);
+                        createBullet(this.x, this.y, this.direction);
+                    }
+                    return;
+            }
 
-                            createBullet(this.x, this.y, this.direction);
-                        }
-                        return;
-                }
-
-                moveMainTank(this);
+            moveMainTank(this);
         });
+
+        if (isMobile()) initControls(App, this, moveMainTank, createBullet);
     }
 
     function Bullet(x, y, direction = App.const.top) {
