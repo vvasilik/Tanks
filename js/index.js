@@ -52,7 +52,7 @@ function init() {
     setInterval(
         () => {
             let {x, y} = getRandomCell();
-            //createTank(x, y, App.const.right)
+            createTank(x, y, App.const.right)
         },
         createTankInterval
     );
