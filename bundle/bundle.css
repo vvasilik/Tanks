@@ -143,3 +143,31 @@ body._mobile .controls {
     font-size: 20px;
     line-height: 30px;
 }
+
+.score {
+    opacity: 0;
+    visibility: hidden;
+    transform: scale(1);
+    position: fixed;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-pack: center;
+        justify-content: center;
+    -ms-flex-align: center;
+        align-items: center;
+    font-size: 50px;
+    line-height: 600px;
+    font-weight: bold;
+    color: #0f0;
+    transition: opacity 1s, visibility 1s, transform 1s
+}
+
+.score._visible {
+    opacity: 0.3;
+    visibility: visible;
+    transform: scale(4);
+}

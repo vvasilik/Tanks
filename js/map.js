@@ -1,4 +1,4 @@
-export function initMap(options) {
+export default function initMap(options) {
     const {width, height} = options;
     const map = document.createElement("div");
     map.className = "map";
