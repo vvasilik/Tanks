@@ -58,10 +58,10 @@ export default function moveBullet(App, bullet) {
                 item.avatar.parentNode.removeChild(item.avatar);
             }
         });
-
-        setTimeout(() => {
+        //TODO remove bullet some time later
+        // setTimeout(() => {
             removeBullet(App, bullet);
-        }, App.variables.interval)
+        // }, App.variables.interval)
     }
 
     requestAnimationFrame(() => {

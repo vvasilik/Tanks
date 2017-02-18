@@ -612,10 +612,10 @@
 	                item.avatar.parentNode.removeChild(item.avatar);
 	            }
 	        });
-
-	        setTimeout(function () {
-	            (0, _removeBullet2.default)(App, bullet);
-	        }, App.variables.interval);
+	        //TODO remove bullet some time later
+	        // setTimeout(() => {
+	        (0, _removeBullet2.default)(App, bullet);
+	        // }, App.variables.interval)
 	    }
 
 	    requestAnimationFrame(function () {
