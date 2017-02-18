@@ -62,24 +62,19 @@
 
 	var _tank2 = _interopRequireDefault(_tank);
 
-	var _removeBullet = __webpack_require__(11);
+	var _moveBullet = __webpack_require__(11);
 
-	var _removeBullet2 = _interopRequireDefault(_removeBullet);
+	var _moveBullet2 = _interopRequireDefault(_moveBullet);
 
-	var _indexHelpers = __webpack_require__(12);
-
-	var _score = __webpack_require__(14);
-
-	var _score2 = _interopRequireDefault(_score);
+	var _indexHelpers = __webpack_require__(15);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	__webpack_require__(15);
+	__webpack_require__(17);
 
 	init();
 
 	function init() {
-	    var score = 0;
 	    if ((0, _indexHelpers.isMobile)()) _app2.default.variables.body.classList.add("_mobile");
 
 	    (0, _map2.default)({
@@ -112,83 +107,8 @@
 
 	    function moveBullets() {
 	        _app2.default.bullets.map(function (bullet) {
-	            moveBullet(bullet);
+	            (0, _moveBullet2.default)(_app2.default, bullet);
 	        });
-	    }
-
-	    function moveBullet(bullet) {
-	        var x = bullet.x,
-	            y = bullet.y;
-
-	        var cellInfo = void 0;
-
-	        switch (bullet.direction) {
-	            case _app2.default.const.bottom:
-	                if (bullet.y + 1 < _app2.default.variables.mapHeight) {
-	                    bullet.y += 1;
-	                } else {
-	                    (0, _removeBullet2.default)(_app2.default, bullet);
-	                    return;
-	                }
-	                break;
-
-	            case _app2.default.const.top:
-	                if (bullet.y - 1 >= 0) {
-	                    bullet.y -= 1;
-	                } else {
-	                    (0, _removeBullet2.default)(_app2.default, bullet);
-	                    return;
-	                }
-	                break;
-
-	            case _app2.default.const.right:
-	                if (bullet.x + 1 < _app2.default.variables.mapWidth) {
-	                    bullet.x += 1;
-	                } else {
-	                    (0, _removeBullet2.default)(_app2.default, bullet);
-	                    return;
-	                }
-	                break;
-
-	            case _app2.default.const.left:
-	                if (bullet.x - 1 >= 0) {
-	                    bullet.x -= 1;
-	                } else {
-	                    (0, _removeBullet2.default)(_app2.default, bullet);
-	                    return;
-	                }
-	                break;
-
-	            default:
-	                console.log("move bullet error");
-	        }
-
-	        cellInfo = (0, _indexHelpers.isEmptyCell)(_app2.default, bullet.x, bullet.y, bullet.avatar.dataset.index);
-
-	        if (!cellInfo.isEmpty) {
-	            _app2.default[cellInfo.category].map(function (item, index) {
-	                if (item.avatar === cellInfo.item.avatar) {
-	                    if (cellInfo.category === "tanks") changeScore();
-
-	                    _app2.default[cellInfo.category].splice(index, 1);
-	                    item.avatar.parentNode.removeChild(item.avatar);
-	                }
-	            });
-
-	            setTimeout(function () {
-	                (0, _removeBullet2.default)(_app2.default, bullet);
-	            }, _app2.default.variables.interval);
-	        }
-
-	        requestAnimationFrame(function () {
-	            bullet.avatar.style.left = bullet.x * _app2.default.variables.point + "px";
-	            bullet.avatar.style.top = bullet.y * _app2.default.variables.point + "px";
-	        });
-	    }
-
-	    function changeScore() {
-	        score++;
-	        (0, _score2.default)(score);
 	    }
 	}
 
@@ -610,6 +530,102 @@
 
 /***/ },
 /* 11 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	exports.default = moveBullet;
+
+	var _removeBullet = __webpack_require__(12);
+
+	var _removeBullet2 = _interopRequireDefault(_removeBullet);
+
+	var _changeScore = __webpack_require__(13);
+
+	var _changeScore2 = _interopRequireDefault(_changeScore);
+
+	var _isEmptyCell = __webpack_require__(8);
+
+	var _isEmptyCell2 = _interopRequireDefault(_isEmptyCell);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function moveBullet(App, bullet) {
+	    var x = bullet.x,
+	        y = bullet.y;
+
+	    var cellInfo = void 0;
+	    var score = 0;
+
+	    switch (bullet.direction) {
+	        case App.const.bottom:
+	            if (bullet.y + 1 < App.variables.mapHeight) {
+	                bullet.y += 1;
+	            } else {
+	                (0, _removeBullet2.default)(App, bullet);
+	                return;
+	            }
+	            break;
+
+	        case App.const.top:
+	            if (bullet.y - 1 >= 0) {
+	                bullet.y -= 1;
+	            } else {
+	                (0, _removeBullet2.default)(App, bullet);
+	                return;
+	            }
+	            break;
+
+	        case App.const.right:
+	            if (bullet.x + 1 < App.variables.mapWidth) {
+	                bullet.x += 1;
+	            } else {
+	                (0, _removeBullet2.default)(App, bullet);
+	                return;
+	            }
+	            break;
+
+	        case App.const.left:
+	            if (bullet.x - 1 >= 0) {
+	                bullet.x -= 1;
+	            } else {
+	                (0, _removeBullet2.default)(App, bullet);
+	                return;
+	            }
+	            break;
+
+	        default:
+	            console.log("move bullet error");
+	    }
+
+	    cellInfo = (0, _isEmptyCell2.default)(App, bullet.x, bullet.y, bullet.avatar.dataset.index);
+
+	    if (!cellInfo.isEmpty) {
+	        App[cellInfo.category].map(function (item, index) {
+	            if (item.avatar === cellInfo.item.avatar) {
+	                if (cellInfo.category === "tanks") (0, _changeScore2.default)(score);
+
+	                App[cellInfo.category].splice(index, 1);
+	                item.avatar.parentNode.removeChild(item.avatar);
+	            }
+	        });
+
+	        setTimeout(function () {
+	            (0, _removeBullet2.default)(App, bullet);
+	        }, App.variables.interval);
+	    }
+
+	    requestAnimationFrame(function () {
+	        bullet.avatar.style.left = bullet.x * App.variables.point + "px";
+	        bullet.avatar.style.top = bullet.y * App.variables.point + "px";
+	    });
+	}
+
+/***/ },
+/* 12 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -631,7 +647,52 @@
 	}
 
 /***/ },
-/* 12 */
+/* 13 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	exports.default = changeScore;
+
+	var _score = __webpack_require__(14);
+
+	var _score2 = _interopRequireDefault(_score);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	var score = 0;
+
+	function changeScore() {
+	    score++;
+	    (0, _score2.default)(score);
+	}
+
+/***/ },
+/* 14 */
+/***/ function(module, exports) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	exports.default = showScore;
+	function showScore(score) {
+	    clearTimeout(timer);
+	    var box = document.querySelector(".score");
+	    box.innerText = score;
+	    box.classList.add("_visible");
+
+	    var timer = setTimeout(function () {
+	        return box.classList.remove("_visible");
+	    }, 2000);
+	}
+
+/***/ },
+/* 15 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -641,7 +702,7 @@
 	});
 	exports.isMobile = exports.isEmptyCell = exports.getRandomCell = undefined;
 
-	var _getRandomCell = __webpack_require__(13);
+	var _getRandomCell = __webpack_require__(16);
 
 	var _getRandomCell2 = _interopRequireDefault(_getRandomCell);
 
@@ -660,7 +721,7 @@
 	exports.isMobile = _isMobile2.default;
 
 /***/ },
-/* 13 */
+/* 16 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -693,28 +754,7 @@
 	}
 
 /***/ },
-/* 14 */
-/***/ function(module, exports) {
-
-	"use strict";
-
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-	exports.default = showScore;
-	function showScore(score) {
-	    clearTimeout(timer);
-	    var box = document.querySelector(".score");
-	    box.innerText = score;
-	    box.classList.add("_visible");
-
-	    var timer = setTimeout(function () {
-	        return box.classList.remove("_visible");
-	    }, 2000);
-	}
-
-/***/ },
-/* 15 */
+/* 17 */
 /***/ function(module, exports) {
 
 	// removed by extract-text-webpack-plugin
