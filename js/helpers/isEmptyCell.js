@@ -1,4 +1,4 @@
-export default function isEmptyCell(App, x, y, index) {
+export default function isEmptyCell(App, x, y, index = false) {
     let res = {
         x: x,
         y: y,
@@ -7,7 +7,7 @@ export default function isEmptyCell(App, x, y, index) {
 
     App.tanks.map((tank) => {
         if (tank.x === x && tank.y === y && tank.avatar.dataset.index !== index) {
-            res = {
+            return res = {
                 x: x,
                 y: y,
                 category: "tanks",
@@ -19,7 +19,7 @@ export default function isEmptyCell(App, x, y, index) {
 
     App.bullets.map((bullet) => {
         if (bullet.x === x && bullet.y === y && bullet.avatar.dataset.index !== index) {
-            res = {
+            return res = {
                 x: x,
                 y: y,
                 category: "bullets",
@@ -30,7 +30,7 @@ export default function isEmptyCell(App, x, y, index) {
     });
 
     if (App.mainTank.avatar.x === x && App.mainTank.avatar.y === y) {
-        res = {
+        return res = {
             x: x,
             y: y,
             category: "mainTank",

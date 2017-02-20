@@ -39,5 +39,7 @@ module.exports = {
 
     plugins: [
         new ExtractTextPlugin('bundle.css')
-    ]
+    ],
+
+    devtool: 'source-map'
 };

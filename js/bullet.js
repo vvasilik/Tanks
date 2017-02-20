@@ -1,3 +1,8 @@
+import isEmptyCell from "./helpers/isEmptyCell"
+import removeItem from "./removeItem"
+import removeBullet from "./removeBullet"
+import makeExplore from "./makeExplore"
+
 export default function Bullet(App, x, y, direction = App.const.top) {
 
     switch (direction) {
@@ -30,6 +35,12 @@ export default function Bullet(App, x, y, direction = App.const.top) {
     avatar.style.width = `${App.variables.point}px`;
     avatar.style.height = `${App.variables.point}px`;
     App.variables.main.appendChild(avatar);
-
     this.avatar = avatar;
+
+    let cellInfo = isEmptyCell(App, x, y);
+
+    if (!cellInfo.isEmpty) {
+        removeItem(App, cellInfo);
+        makeExplore(this);
+    }
 }

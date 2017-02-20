@@ -1,11 +1,12 @@
 import removeBullet from "./removeBullet"
-import changeScore from "./changeScore"
+import removeItem from "./removeItem"
 import isEmptyCell from "./helpers/isEmptyCell"
 
 export default function moveBullet(App, bullet) {
+    if (bullet.avatar.classList.contains("_explosion")) return false;
+
     let {x, y} = bullet;
     let cellInfo;
-    let score = 0;
 
     switch (bullet.direction) {
         case App.const.bottom:
@@ -50,22 +51,17 @@ export default function moveBullet(App, bullet) {
     cellInfo = isEmptyCell(App, bullet.x, bullet.y, bullet.avatar.dataset.index);
 
     if (!cellInfo.isEmpty) {
-        App[cellInfo.category].map((item, index) => {
-            if (item.avatar === cellInfo.item.avatar) {
-                if (cellInfo.category === "tanks") changeScore(score);
 
-                App[cellInfo.category].splice(index, 1);
-                item.avatar.parentNode.removeChild(item.avatar);
-            }
-        });
+        removeItem(App, cellInfo);
+
         //TODO remove bullet some time later
         // setTimeout(() => {
             removeBullet(App, bullet);
         // }, App.variables.interval)
+    } else {
+        requestAnimationFrame(() => {
+            bullet.avatar.style.left = `${bullet.x * App.variables.point}px`;
+            bullet.avatar.style.top = `${bullet.y * App.variables.point}px`;
+        });
     }
-
-    requestAnimationFrame(() => {
-        bullet.avatar.style.left = `${bullet.x * App.variables.point}px`;
-        bullet.avatar.style.top = `${bullet.y * App.variables.point}px`;
-    });
 }
