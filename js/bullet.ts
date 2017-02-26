@@ -29,7 +29,7 @@ export default function Bullet(App, x, y, direction = App.const.top) {
 
     let avatar = document.createElement("div");
     avatar.className = `bullet ${direction}`;
-    avatar.dataset.index = ++App.bulletsIndex;
+    avatar.dataset["index"] = `${++App.bulletsIndex}`;
     avatar.style.left = `${x * App.variables.point}px`;
     avatar.style.top = `${y * App.variables.point}px`;
     avatar.style.width = `${App.variables.point}px`;

@@ -1,8 +1,9 @@
 export default function showScore(score) {
+    let timer;
     clearTimeout(timer);
     const box = document.querySelector(".score");
-    box.innerText = score;
+    (<HTMLElement>box).innerText = score;
     box.classList.add("_visible");
 
-    let timer = setTimeout(() => box.classList.remove("_visible"), 2000);
+    timer = setTimeout(() => box.classList.remove("_visible"), 2000);
 }

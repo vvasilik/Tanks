@@ -3,23 +3,26 @@ const autoprefixer = require('autoprefixer');
 const ExtractTextPlugin = require ('extract-text-webpack-plugin');
 
 module.exports = {
-    entry: './js/index',
+    entry: {
+        bundleCss: "./js/indexCss",
+        bundle: "./js/index"
+    },
 
     output: {
         path: "bundle",
-        filename: 'bundle.js'
+        filename: '[name].js'
+    },
+    
+    resolve: {
+        extensions: ['', '.webpack.js', '.web.js', '.ts', '.js']
     },
 
     module: {
         loaders: [
             {
-              test: /\.js$/,
+              test: /\.ts$/,
               exclude: /(node_modules|bower_components)/,
-              loader: 'babel',
-              query: {
-                  presets: ['es2015']
-              }
-
+              loader: 'ts-loader'
             },
 
             {

@@ -19,6 +19,8 @@
     "postcss-loader": "^1.2.1",
     "precss": "^1.4.0",
     "style-loader": "^0.13.1",
+    "ts-loader": "^2.0.1",
+    "typescript": "^2.2.1",
     "url-loader": "^0.5.7",
     "webpack": "^1.13.3"
   }

@@ -1,6 +1,5 @@
-require("../css/style.css");
-
 import App from "./app"
+import initAudio from "./audio"
 import initMap from "./map"
 import MainTank from "./mainTank"
 import Tank from "./tank"
@@ -10,6 +9,8 @@ import {getRandomCell, isMobile} from "./helpers/indexHelpers"
 init();
 
 function init() {
+    initAudio();
+
     if (isMobile()) App.variables.body.classList.add("_mobile");
 
     initMap({

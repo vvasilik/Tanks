@@ -6,7 +6,7 @@ export default function removeItem(App, cellInfo) {
             if (cellInfo.category === "tanks") changeScore();
 
             App[cellInfo.category].splice(index, 1);
-            item.avatar.parentNode.removeChild(item.avatar);
+            item && item.avatar.parentNode && item.avatar.parentNode.removeChild(item.avatar);
         }
     });
 }
