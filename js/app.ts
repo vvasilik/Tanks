@@ -1,4 +1,5 @@
 import isMobile from "./helpers/isMobile";
+import {IApp} from "./Interfaces/IApp";
 
 const body = document.body;
 const point = 50;
@@ -8,11 +9,15 @@ const mapWidth = (bodyWidth - bodyWidth % point) / point;
 const mapHeight = (bodyHeight - bodyHeight % point) / point;
 
 
-let App = {
+let App: IApp = {
     tanks: [],
     bullets: [],
     bulletsIndex: 0,
-    mainTank: Object,
+    mainTank: {
+        x: 0,
+        y: 0,
+        direction: ""
+    },
 
     const: {
         left: "_left",

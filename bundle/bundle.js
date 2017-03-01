@@ -101,7 +101,11 @@
 	    tanks: [],
 	    bullets: [],
 	    bulletsIndex: 0,
-	    mainTank: Object,
+	    mainTank: {
+	        x: 0,
+	        y: 0,
+	        direction: ""
+	    },
 	    "const": {
 	        left: "_left",
 	        top: "_top",

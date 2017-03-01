@@ -1,3 +1,4 @@
+
 export default function Tank(App, x, y, direction = App.const.top) {
     this.x = x;
     this.y = y;
