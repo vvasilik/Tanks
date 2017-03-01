@@ -16,7 +16,8 @@ let App: IApp = {
     mainTank: {
         x: 0,
         y: 0,
-        direction: ""
+        direction: "",
+        avatar: null
     },
 
     const: {

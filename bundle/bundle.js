@@ -104,7 +104,8 @@
 	    mainTank: {
 	        x: 0,
 	        y: 0,
-	        direction: ""
+	        direction: "",
+	        avatar: null
 	    },
 	    "const": {
 	        left: "_left",
@@ -484,20 +485,26 @@
 
 	"use strict";
 	exports.__esModule = true;
-	function Tank(App, x, y, direction) {
-	    if (direction === void 0) { direction = App["const"].top; }
-	    this.x = x;
-	    this.y = y;
-	    this.direction = direction;
-	    var avatar = document.createElement("div");
-	    avatar.className = "computer-tank " + direction;
-	    avatar.style.left = x * App.variables.point + "px";
-	    avatar.style.top = y * App.variables.point + "px";
-	    avatar.style.width = App.variables.point + "px";
-	    avatar.style.height = App.variables.point + "px";
-	    App.variables.main.appendChild(avatar);
-	    this.avatar = avatar;
-	}
+	var Tank = (function () {
+	    function Tank(App, x, y, direction) {
+	        if (direction === void 0) { direction = App["const"].top; }
+	        this.x = x;
+	        this.y = y;
+	        this.direction = direction;
+	        this.avatar = this.createAvatar(App, direction, x, y);
+	    }
+	    Tank.prototype.createAvatar = function (App, direction, x, y) {
+	        var avatar = document.createElement("div");
+	        avatar.className = "computer-tank " + direction;
+	        avatar.style.left = x * App.variables.point + "px";
+	        avatar.style.top = y * App.variables.point + "px";
+	        avatar.style.width = App.variables.point + "px";
+	        avatar.style.height = App.variables.point + "px";
+	        App.variables.main.appendChild(avatar);
+	        return avatar;
+	    };
+	    return Tank;
+	}());
 	exports["default"] = Tank;
 
 

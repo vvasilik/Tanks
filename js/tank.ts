@@ -1,16 +1,28 @@
 
-export default function Tank(App, x, y, direction = App.const.top) {
-    this.x = x;
-    this.y = y;
-    this.direction = direction;
+import {IObject} from "./Interfaces/IObject"
 
-    let avatar = document.createElement("div");
-    avatar.className = `computer-tank ${direction}`;
-    avatar.style.left = `${x * App.variables.point}px`;
-    avatar.style.top = `${y * App.variables.point}px`;
-    avatar.style.width = `${App.variables.point}px`;
-    avatar.style.height = `${App.variables.point}px`;
-    App.variables.main.appendChild(avatar);
+export default class Tank implements IObject {
+    public x: number;
+    public y: number;
+    public direction: string;
+    public avatar: Element;
 
-    this.avatar = avatar;
+    constructor(App, x, y, direction = App.const.top) {
+        this.x = x;
+        this.y = y;
+        this.direction = direction;
+        this.avatar = this.createAvatar(App, direction, x, y);   
+    }
+
+    private createAvatar(App, direction, x, y): Element {
+        let avatar = document.createElement("div");
+        avatar.className = `computer-tank ${direction}`;
+        avatar.style.left = `${x * App.variables.point}px`;
+        avatar.style.top = `${y * App.variables.point}px`;
+        avatar.style.width = `${App.variables.point}px`;
+        avatar.style.height = `${App.variables.point}px`;
+        App.variables.main.appendChild(avatar);
+
+        return avatar;
+    }
 }
