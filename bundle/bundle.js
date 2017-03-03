@@ -387,40 +387,55 @@
 	var isEmptyCell_1 = __webpack_require__(9);
 	var removeItem_1 = __webpack_require__(11);
 	var makeExplore_1 = __webpack_require__(14);
-	function Bullet(App, x, y, direction) {
-	    if (direction === void 0) { direction = App["const"].top; }
-	    switch (direction) {
-	        case App["const"].bottom:
-	            y = y + 1;
-	            break;
-	        case App["const"].top:
-	            y = y - 1;
-	            break;
-	        case App["const"].right:
-	            x = x + 1;
-	            break;
-	        case App["const"].left:
-	            x = x - 1;
-	            break;
+	var Bullet = (function () {
+	    function Bullet(App, x, y, direction) {
+	        if (direction === void 0) { direction = App["const"].top; }
+	        var _a = this.getCoords(App, x, y, direction), newX = _a.newX, newY = _a.newY;
+	        this.x = newX;
+	        this.y = newY;
+	        this.direction = direction;
+	        this.avatar = this.createAvatar(App, direction, newX, newY);
+	        this.exploreIfUnemptyCell(App, newX, newY);
 	    }
-	    this.x = x;
-	    this.y = y;
-	    this.direction = direction;
-	    var avatar = document.createElement("div");
-	    avatar.className = "bullet " + direction;
-	    avatar.dataset["index"] = "" + ++App.bulletsIndex;
-	    avatar.style.left = x * App.variables.point + "px";
-	    avatar.style.top = y * App.variables.point + "px";
-	    avatar.style.width = App.variables.point + "px";
-	    avatar.style.height = App.variables.point + "px";
-	    App.variables.main.appendChild(avatar);
-	    this.avatar = avatar;
-	    var cellInfo = isEmptyCell_1["default"](App, x, y);
-	    if (!cellInfo.isEmpty) {
-	        removeItem_1["default"](App, cellInfo);
-	        makeExplore_1["default"](this);
-	    }
-	}
+	    Bullet.prototype.getCoords = function (App, x, y, direction) {
+	        var newX = x;
+	        var newY = y;
+	        switch (direction) {
+	            case App["const"].bottom:
+	                newY = y + 1;
+	                break;
+	            case App["const"].top:
+	                newY = y - 1;
+	                break;
+	            case App["const"].right:
+	                newX = x + 1;
+	                break;
+	            case App["const"].left:
+	                newX = x - 1;
+	                break;
+	        }
+	        return { newX: newX, newY: newY };
+	    };
+	    Bullet.prototype.createAvatar = function (App, direction, x, y) {
+	        var avatar = document.createElement("div");
+	        avatar.className = "bullet " + direction;
+	        avatar.dataset["index"] = "" + ++App.bulletsIndex;
+	        avatar.style.left = x * App.variables.point + "px";
+	        avatar.style.top = y * App.variables.point + "px";
+	        avatar.style.width = App.variables.point + "px";
+	        avatar.style.height = App.variables.point + "px";
+	        App.variables.main.appendChild(avatar);
+	        return avatar;
+	    };
+	    Bullet.prototype.exploreIfUnemptyCell = function (App, x, y) {
+	        var cellInfo = isEmptyCell_1["default"](App, x, y);
+	        if (!cellInfo.isEmpty) {
+	            removeItem_1["default"](App, cellInfo);
+	            makeExplore_1["default"](this);
+	        }
+	    };
+	    return Bullet;
+	}());
 	exports["default"] = Bullet;
 
 
