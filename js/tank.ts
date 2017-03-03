@@ -1,5 +1,4 @@
-
-import {IObject} from "./Interfaces/IObject"
+import {IObject} from "./Interfaces/IObject";
 
 export default class Tank implements IObject {
     public x: number;
@@ -14,7 +13,7 @@ export default class Tank implements IObject {
         this.avatar = this.createAvatar(App, direction, x, y);   
     }
 
-    private createAvatar(App, direction, x, y): Element {
+    private createAvatar(App, direction:string, x:number, y:number): Element {
         let avatar = document.createElement("div");
         avatar.className = `computer-tank ${direction}`;
         avatar.style.left = `${x * App.variables.point}px`;

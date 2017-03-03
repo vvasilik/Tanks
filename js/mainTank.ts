@@ -1,61 +1,77 @@
-import moveMainTank from "./moveMainTank"
-import initControls from "./controls"
-import createBullet from "./createBullet"
-import isMobile from "./helpers/isMobile"
+import {IObject} from "./Interfaces/IObject";
+import moveMainTank from "./moveMainTank";
+import initControls from "./controls";
+import createBullet from "./createBullet";
+import isMobile from "./helpers/isMobile";
 
-export default function MainTank(App, x, y, direction = App.const.top) {
-    let isPressedSpace = false;
+export default class MainTank implements IObject {
+    public x: number;
+    public y: number;
+    public direction: string;
+    public avatar: Element;
 
-    this.x = x;
-    this.y = y;
-    this.direction = direction;
+    constructor(App, x:number, y:number, direction:string = App.const.top) {
+        this.x = x;
+        this.y = y;
+        this.direction = direction;
+        this.avatar = this.createAvatar(App, direction, x, y);
+        this.initListeners(App);
+        this.initTankControls(App);
+    }
 
-    let avatar = document.createElement("div");
-    avatar.className = `main-tank ${direction}`;
-    avatar.style.left = `${x * App.variables.point}px`;
-    avatar.style.top = `${y * App.variables.point}px`;
-    avatar.style.width = `${App.variables.point}px`;
-    avatar.style.height = `${App.variables.point}px`;
-    App.variables.main.appendChild(avatar);
+    private createAvatar(App, direction:string, x:number, y:number) {
+        let avatar = document.createElement("div");
+        avatar.className = `main-tank ${direction}`;
+        avatar.style.left = `${x * App.variables.point}px`;
+        avatar.style.top = `${y * App.variables.point}px`;
+        avatar.style.width = `${App.variables.point}px`;
+        avatar.style.height = `${App.variables.point}px`;
+        App.variables.main.appendChild(avatar);
 
-    this.avatar = avatar;
+        return avatar;
+    }
 
-    App.variables.body.addEventListener("keydown", (e) => {
+    private initTankControls(App) {
+        if (isMobile()) initControls(App, this, moveMainTank, createBullet);
+    }
 
-        const code = e.keyCode;
+    private initListeners(App) {
+        let isPressedSpace = false;
 
-        switch (code) {
-            case 40:
-                this.direction = App.const.bottom;
-                break;
+        App.variables.body.addEventListener("keydown", (e) => {
+            const code = e.keyCode;
 
-            case 38:
-                this.direction = App.const.top;
-                break;
+            switch (code) {
+                case 40:
+                    this.direction = App.const.bottom;
+                    break;
 
-            case 39:
-                this.direction = App.const.right;
-                break;
+                case 38:
+                    this.direction = App.const.top;
+                    break;
 
-            case 37:
-                this.direction = App.const.left;
-                break;
+                case 39:
+                    this.direction = App.const.right;
+                    break;
 
-            case 32:
-                if (!isPressedSpace) {
-                    isPressedSpace = true;
+                case 37:
+                    this.direction = App.const.left;
+                    break;
 
-                    setTimeout(() => {
-                        isPressedSpace = false;
-                    }, App.variables.intervalBulletsCreation);
+                case 32:
+                    if (!isPressedSpace) {
+                        isPressedSpace = true;
 
-                    createBullet(App, this.x, this.y, this.direction);
-                }
-                return;
-        }
+                        setTimeout(() => {
+                            isPressedSpace = false;
+                        }, App.variables.intervalBulletsCreation);
 
-        moveMainTank(App, this);
-    });
+                        createBullet(App, this.x, this.y, this.direction);
+                    }
+                    return;
+            }
 
-    if (isMobile()) initControls(App, this, moveMainTank, createBullet);
+            moveMainTank(App, this);
+        });
+    }
 }

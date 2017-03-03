@@ -186,51 +186,63 @@
 	var controls_1 = __webpack_require__(7);
 	var createBullet_1 = __webpack_require__(8);
 	var isMobile_1 = __webpack_require__(2);
-	function MainTank(App, x, y, direction) {
-	    var _this = this;
-	    if (direction === void 0) { direction = App["const"].top; }
-	    var isPressedSpace = false;
-	    this.x = x;
-	    this.y = y;
-	    this.direction = direction;
-	    var avatar = document.createElement("div");
-	    avatar.className = "main-tank " + direction;
-	    avatar.style.left = x * App.variables.point + "px";
-	    avatar.style.top = y * App.variables.point + "px";
-	    avatar.style.width = App.variables.point + "px";
-	    avatar.style.height = App.variables.point + "px";
-	    App.variables.main.appendChild(avatar);
-	    this.avatar = avatar;
-	    App.variables.body.addEventListener("keydown", function (e) {
-	        var code = e.keyCode;
-	        switch (code) {
-	            case 40:
-	                _this.direction = App["const"].bottom;
-	                break;
-	            case 38:
-	                _this.direction = App["const"].top;
-	                break;
-	            case 39:
-	                _this.direction = App["const"].right;
-	                break;
-	            case 37:
-	                _this.direction = App["const"].left;
-	                break;
-	            case 32:
-	                if (!isPressedSpace) {
-	                    isPressedSpace = true;
-	                    setTimeout(function () {
-	                        isPressedSpace = false;
-	                    }, App.variables.intervalBulletsCreation);
-	                    createBullet_1["default"](App, _this.x, _this.y, _this.direction);
-	                }
-	                return;
-	        }
-	        moveMainTank_1["default"](App, _this);
-	    });
-	    if (isMobile_1["default"]())
-	        controls_1["default"](App, this, moveMainTank_1["default"], createBullet_1["default"]);
-	}
+	var MainTank = (function () {
+	    function MainTank(App, x, y, direction) {
+	        if (direction === void 0) { direction = App["const"].top; }
+	        this.x = x;
+	        this.y = y;
+	        this.direction = direction;
+	        this.avatar = this.createAvatar(App, direction, x, y);
+	        this.initListeners(App);
+	        this.initTankControls(App);
+	    }
+	    MainTank.prototype.createAvatar = function (App, direction, x, y) {
+	        var avatar = document.createElement("div");
+	        avatar.className = "main-tank " + direction;
+	        avatar.style.left = x * App.variables.point + "px";
+	        avatar.style.top = y * App.variables.point + "px";
+	        avatar.style.width = App.variables.point + "px";
+	        avatar.style.height = App.variables.point + "px";
+	        App.variables.main.appendChild(avatar);
+	        return avatar;
+	    };
+	    MainTank.prototype.initTankControls = function (App) {
+	        if (isMobile_1["default"]())
+	            controls_1["default"](App, this, moveMainTank_1["default"], createBullet_1["default"]);
+	    };
+	    MainTank.prototype.initListeners = function (App) {
+	        var _this = this;
+	        var isPressedSpace = false;
+	        App.variables.body.addEventListener("keydown", function (e) {
+	            var code = e.keyCode;
+	            switch (code) {
+	                case 40:
+	                    _this.direction = App["const"].bottom;
+	                    break;
+	                case 38:
+	                    _this.direction = App["const"].top;
+	                    break;
+	                case 39:
+	                    _this.direction = App["const"].right;
+	                    break;
+	                case 37:
+	                    _this.direction = App["const"].left;
+	                    break;
+	                case 32:
+	                    if (!isPressedSpace) {
+	                        isPressedSpace = true;
+	                        setTimeout(function () {
+	                            isPressedSpace = false;
+	                        }, App.variables.intervalBulletsCreation);
+	                        createBullet_1["default"](App, _this.x, _this.y, _this.direction);
+	                    }
+	                    return;
+	            }
+	            moveMainTank_1["default"](App, _this);
+	        });
+	    };
+	    return MainTank;
+	}());
 	exports["default"] = MainTank;
 
 
