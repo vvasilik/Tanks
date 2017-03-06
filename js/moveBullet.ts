@@ -1,3 +1,4 @@
+import sounds from "./sounds"
 import removeBullet from "./removeBullet"
 import removeItem from "./removeItem"
 import isEmptyCell from "./helpers/isEmptyCell"
@@ -13,6 +14,7 @@ export default function moveBullet(App, bullet) {
             if (bullet.y + 1 < App.variables.mapHeight) {
                 bullet.y += 1;
             } else {
+                sounds.bulletExplore();
                 removeBullet(App, bullet);
                 return;
             }
@@ -22,6 +24,7 @@ export default function moveBullet(App, bullet) {
             if (bullet.y - 1 >= 0) {
                 bullet.y -= 1;
             } else {
+                sounds.bulletExplore();
                 removeBullet(App, bullet);
                 return;
             }
@@ -31,6 +34,7 @@ export default function moveBullet(App, bullet) {
             if (bullet.x + 1 < App.variables.mapWidth) {
                 bullet.x += 1;
             } else {
+                sounds.bulletExplore();
                 removeBullet(App, bullet);
                 return;
             }
@@ -40,6 +44,7 @@ export default function moveBullet(App, bullet) {
             if (bullet.x - 1 >= 0) {
                 bullet.x -= 1;
             } else {
+                sounds.bulletExplore();
                 removeBullet(App, bullet);
                 return;
             }

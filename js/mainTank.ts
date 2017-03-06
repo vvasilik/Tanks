@@ -1,3 +1,4 @@
+import sounds from "./sounds"
 import {IObject} from "./Interfaces/IObject";
 import moveMainTank from "./moveMainTank";
 import initControls from "./controls";
@@ -67,6 +68,7 @@ export default class MainTank implements IObject {
                         }, App.variables.intervalBulletsCreation);
 
                         createBullet(App, this.x, this.y, this.direction);
+                        sounds.tankFiree();
                     }
                     return;
             }

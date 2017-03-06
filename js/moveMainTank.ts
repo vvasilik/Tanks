@@ -1,4 +1,8 @@
+import sounds from "./sounds"
+
 export default function moveMainTank(App, item) {
+    sounds.tankMove();
+
     switch (item.direction) {
         case App.const.bottom:
             if (item.y + 1 < App.variables.mapHeight) item.y += 1;

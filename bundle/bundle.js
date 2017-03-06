@@ -47,7 +47,7 @@
 	"use strict";
 	exports.__esModule = true;
 	var app_1 = __webpack_require__(1);
-	var audio_1 = __webpack_require__(3);
+	var sounds_1 = __webpack_require__(3);
 	var map_1 = __webpack_require__(4);
 	var mainTank_1 = __webpack_require__(5);
 	var tank_1 = __webpack_require__(15);
@@ -55,21 +55,27 @@
 	var indexHelpers_1 = __webpack_require__(18);
 	init();
 	function init() {
-	    audio_1["default"]();
-	    if (indexHelpers_1.isMobile())
-	        app_1["default"].variables.body.classList.add("_mobile");
+	    sounds_1["default"].start();
 	    map_1["default"]({
 	        width: app_1["default"].variables.point * app_1["default"].variables.mapWidth,
 	        height: app_1["default"].variables.point * app_1["default"].variables.mapHeight,
 	        holder: app_1["default"].variables.main
 	    });
 	    createMainTank(app_1["default"].variables.minX, app_1["default"].variables.minY, app_1["default"]["const"].right);
-	    setInterval(moveBullets, app_1["default"].variables.interval);
-	    setInterval(function () {
-	        var _a = indexHelpers_1.getRandomCell(app_1["default"]), x = _a.x, y = _a.y;
-	        createTank(x, y, app_1["default"]["const"].right);
-	    }, app_1["default"].variables.createTankInterval);
+	    setMobileProps();
+	    start();
 	    // ----------
+	    function start() {
+	        setInterval(moveBullets, app_1["default"].variables.interval);
+	        setInterval(function () {
+	            var _a = indexHelpers_1.getRandomCell(app_1["default"]), x = _a.x, y = _a.y;
+	            createTank(x, y, app_1["default"]["const"].right);
+	        }, app_1["default"].variables.createTankInterval);
+	    }
+	    function setMobileProps() {
+	        if (indexHelpers_1.isMobile())
+	            app_1["default"].variables.body.classList.add("_mobile");
+	    }
 	    function createTank(x, y, direction) {
 	        app_1["default"].tanks.push(new tank_1["default"](app_1["default"], x, y, direction));
 	    }
@@ -151,12 +157,41 @@
 
 	"use strict";
 	exports.__esModule = true;
-	function initAudio() {
-	    var holder = document.querySelector(".js-sounds");
-	    var start = holder.querySelector(".js-sound-start");
-	    start.play();
-	}
-	exports["default"] = initAudio;
+	var Sounds = (function () {
+	    function Sounds() {
+	        this.holderDom = document.querySelector(".js-sounds");
+	        this.startDom = this.holderDom.querySelector(".js-sound-start");
+	        this.tankMoveDom = this.holderDom.querySelector(".js-sound-tank-move");
+	        this.tankFireDom = this.holderDom.querySelector(".js-sound-tank-fire");
+	        this.tankExploreDom = this.holderDom.querySelector(".js-sound-tank-explore");
+	        this.bulletExploreDom = this.holderDom.querySelector(".js-sound-bullet-explore");
+	    }
+	    Sounds.prototype.start = function () {
+	        this.startDom.play();
+	    };
+	    Sounds.prototype.tankMove = function () {
+	        var elem = this.tankMoveDom;
+	        elem.currentTime = 0;
+	        elem.play();
+	    };
+	    Sounds.prototype.tankExplore = function () {
+	        var elem = this.tankExploreDom;
+	        elem.currentTime = 0;
+	        elem.play();
+	    };
+	    Sounds.prototype.bulletExplore = function () {
+	        var elem = this.bulletExploreDom;
+	        elem.currentTime = 0;
+	        elem.play();
+	    };
+	    Sounds.prototype.tankFiree = function () {
+	        var elem = this.tankFireDom;
+	        elem.currentTime = 0;
+	        elem.play();
+	    };
+	    return Sounds;
+	}());
+	exports["default"] = new Sounds;
 
 
 /***/ },
@@ -182,6 +217,7 @@
 
 	"use strict";
 	exports.__esModule = true;
+	var sounds_1 = __webpack_require__(3);
 	var moveMainTank_1 = __webpack_require__(6);
 	var controls_1 = __webpack_require__(7);
 	var createBullet_1 = __webpack_require__(8);
@@ -235,6 +271,7 @@
 	                            isPressedSpace = false;
 	                        }, App.variables.intervalBulletsCreation);
 	                        createBullet_1["default"](App, _this.x, _this.y, _this.direction);
+	                        sounds_1["default"].tankFiree();
 	                    }
 	                    return;
 	            }
@@ -248,11 +285,13 @@
 
 /***/ },
 /* 6 */
-/***/ function(module, exports) {
+/***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 	exports.__esModule = true;
+	var sounds_1 = __webpack_require__(3);
 	function moveMainTank(App, item) {
+	    sounds_1["default"].tankMove();
 	    switch (item.direction) {
 	        case App["const"].bottom:
 	            if (item.y + 1 < App.variables.mapHeight)
@@ -445,12 +484,16 @@
 
 	"use strict";
 	exports.__esModule = true;
+	var sounds_1 = __webpack_require__(3);
 	var changeScore_1 = __webpack_require__(12);
 	function removeItem(App, cellInfo) {
 	    App[cellInfo.category].map(function (item, index) {
 	        if (item.avatar === cellInfo.item.avatar) {
-	            if (cellInfo.category === "tanks")
+	            if (cellInfo.category === "tanks") {
+	                sounds_1["default"].tankExplore();
 	                changeScore_1["default"]();
+	            }
+	            ;
 	            App[cellInfo.category].splice(index, 1);
 	            item && item.avatar.parentNode && item.avatar.parentNode.removeChild(item.avatar);
 	        }
@@ -541,6 +584,7 @@
 
 	"use strict";
 	exports.__esModule = true;
+	var sounds_1 = __webpack_require__(3);
 	var removeBullet_1 = __webpack_require__(17);
 	var removeItem_1 = __webpack_require__(11);
 	var isEmptyCell_1 = __webpack_require__(9);
@@ -555,6 +599,7 @@
 	                bullet.y += 1;
 	            }
 	            else {
+	                sounds_1["default"].bulletExplore();
 	                removeBullet_1["default"](App, bullet);
 	                return;
 	            }
@@ -564,6 +609,7 @@
 	                bullet.y -= 1;
 	            }
 	            else {
+	                sounds_1["default"].bulletExplore();
 	                removeBullet_1["default"](App, bullet);
 	                return;
 	            }
@@ -573,6 +619,7 @@
 	                bullet.x += 1;
 	            }
 	            else {
+	                sounds_1["default"].bulletExplore();
 	                removeBullet_1["default"](App, bullet);
 	                return;
 	            }
@@ -582,6 +629,7 @@
 	                bullet.x -= 1;
 	            }
 	            else {
+	                sounds_1["default"].bulletExplore();
 	                removeBullet_1["default"](App, bullet);
 	                return;
 	            }
